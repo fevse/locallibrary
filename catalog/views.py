@@ -11,7 +11,9 @@ def index(request):
     num_genres = Genre.objects.count()
     num_languages = Language.objects.count()
     num_books_letter_o = Book.objects.filter(title__icontains='о').count()
+    num_visits = request.session.get('num_visits', 0)
 
+    request.session['num_visits'] = num_visits+1
 
     return render(
         request,
@@ -23,7 +25,8 @@ def index(request):
         'num_authors': num_authors,
         'num_genres': num_genres,
         'num_languages': num_languages,
-        'num_books_letter_o': num_books_letter_o},
+        'num_books_letter_o': num_books_letter_o,
+        'num_visits': num_visits},
     )
 
 
