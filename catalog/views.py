@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from .models import Book, Author, BookInstance, Genre, Language
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import datetime
 from .forms import RenewBookForm
 
@@ -39,7 +40,7 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 3
+    paginate_by = 5
 
 
 class BookDetailView(generic.DetailView):
@@ -48,7 +49,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(generic.ListView):
     model = Author
-    paginate_by = 3
+    paginate_by = 5
 
 
 class AuthorDetailView(generic.DetailView):
@@ -88,3 +89,35 @@ def renew_book_librarian(request, pk):
         form = RenewBookForm(initial={'renewal_date': proposed_renewal_date,})
 
     return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst':book_inst})
+
+
+class AuthorCreate(CreateView):
+    model = Author
+    fields = '__all__'
+    initial = {'date_of_death':'12/10/2024',}
+
+
+class AuthorUpdate(UpdateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+
+
+class AuthorDelete(DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors')
+
+
+class BookCreate(CreateView):
+    model = Book
+    fields = '__all__'
+
+
+class BookUpdate(UpdateView):
+    model = Book
+    fields = '__all__'
+
+
+class BookDelete(DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
+
