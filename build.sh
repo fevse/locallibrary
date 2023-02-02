@@ -2,6 +2,9 @@
 # exit on error
 set -o errexit
 
+pip install setuptools
+poetry add setuptools
+poetry update setuptools
 poetry install
 pip install setuptools
 poetry add setuptools
