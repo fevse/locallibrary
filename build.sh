@@ -4,6 +4,8 @@ set -o errexit
 
 poetry install
 pip install setuptools
+poetry add setuptools
+poetry update setuptools
 
 python manage.py collectstatic --no-input
 python manage.py migrate
